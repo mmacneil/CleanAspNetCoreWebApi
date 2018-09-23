@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CleanAspNetCoreWebAPI
+namespace Web.Api
 {
     public class Startup
     {
