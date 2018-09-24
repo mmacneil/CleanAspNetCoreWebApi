@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
- 
 
-namespace Infrastructure.Data.Entities
+namespace Web.Api.Infrastructure.Data.EntityFramework.Entities
 {
     public class BaseEntity
     {

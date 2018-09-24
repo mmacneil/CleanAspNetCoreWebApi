@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Web.Api.Infrastructure.Data.EntityFramework.Entities;
 
-namespace Infrastructure.Data
+namespace Web.Api.Infrastructure.EntityFramework.Data
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 
