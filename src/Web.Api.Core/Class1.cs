@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Web.Api.Domain
+namespace Web.Api.Core
 {
     public class Class1
     {
