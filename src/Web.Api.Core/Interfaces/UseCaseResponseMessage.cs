@@ -1,13 +1,12 @@
 ﻿
-
-namespace Web.Api.Shared.Interfaces
+namespace Web.Api.Core.Interfaces
 {
-    public abstract class ResponseMessage
+    public abstract class UseCaseResponseMessage
     {
         public bool Success { get; }
         public string Message { get; }
 
-        protected ResponseMessage(bool success=false, string message = null)
+        protected UseCaseResponseMessage(bool success = false, string message = null)
         {
             Success = success;
             Message = message;

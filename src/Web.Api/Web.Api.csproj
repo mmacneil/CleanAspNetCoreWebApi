@@ -9,11 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Web.Api.Core\Web.Api.Core.csproj" />
     <ProjectReference Include="..\Web.Api.Infrastructure\Web.Api.Infrastructure.csproj" />
   </ItemGroup>
 

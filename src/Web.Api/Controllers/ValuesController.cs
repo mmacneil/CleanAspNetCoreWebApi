@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Web.Api.Core.Dto.UseCaseRequests;
+using Web.Api.Core.Interfaces.UseCases;
+using Web.Api.Presenters;
 
 namespace Web.Api.Controllers
 {
@@ -10,11 +11,21 @@ namespace Web.Api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IRegisterUserUseCase _registerUserUseCase;
+        private readonly RegisterUserPresenter _registerUserPresenter;
+
+        public ValuesController(IRegisterUserUseCase registerUserUseCase, RegisterUserPresenter registerUserPresenter)
+        {
+            _registerUserUseCase = registerUserUseCase;
+            _registerUserPresenter = registerUserPresenter;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            await _registerUserUseCase.Handle(new RegisterUserRequest("Mark Macneil"), _registerUserPresenter);
+            return new[] { "value1", "value2" };
         }
 
         // GET api/values/5
