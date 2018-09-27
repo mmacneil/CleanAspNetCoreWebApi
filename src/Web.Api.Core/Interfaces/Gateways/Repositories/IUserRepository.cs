@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace Web.Api.Core.Interfaces.Gateways.Repositories
 {
-    public interface IUserRepositoryx
+    public interface IUserRepository
     {
-        Task<(bool success, IEnumerable<(string code,string description)>)> Create(string firstName, string lastName, string userName, string password);
+        Task<(bool success, IEnumerable<(string code,string description)> errors)> Create(string firstName, string lastName, string userName, string password);
     }
 }

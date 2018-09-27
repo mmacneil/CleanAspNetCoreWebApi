@@ -16,7 +16,7 @@ namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
             _userManager = userManager;
         }
 
-        public async Task<(bool success, IEnumerable<(string code, string description)>)> Create(string firstName, string lastName, string userName, string password)
+        public async Task<(bool success, IEnumerable<(string code, string description)> errors)> Create(string firstName, string lastName, string userName, string password)
         {
             var identityResult = await _userManager.CreateAsync(new AppUser {FirstName = firstName, LastName = lastName,UserName = userName}, password);
             return identityResult.Succeeded ? (true, null) : (false, identityResult.Errors.Select(e => (e.Code, e.Description)));
