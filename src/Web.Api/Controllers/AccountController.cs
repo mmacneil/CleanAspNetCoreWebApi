@@ -9,12 +9,12 @@ namespace Web.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IRegisterUserUseCase _registerUserUseCase;
         private readonly RegisterUserPresenter _registerUserPresenter;
 
-        public ValuesController(IRegisterUserUseCase registerUserUseCase, RegisterUserPresenter registerUserPresenter)
+        public AccountController(IRegisterUserUseCase registerUserUseCase, RegisterUserPresenter registerUserPresenter)
         {
             _registerUserUseCase = registerUserUseCase;
             _registerUserPresenter = registerUserPresenter;
@@ -29,7 +29,7 @@ namespace Web.Api.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+       /* [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
             return "value";
@@ -51,6 +51,6 @@ namespace Web.Api.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }
