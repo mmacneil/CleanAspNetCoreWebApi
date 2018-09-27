@@ -2,7 +2,7 @@
 
 namespace Web.Api.Core.Interfaces
 {
-    public interface IOutputPort<in TUseCaseResponse>
+    public interface IOutputPortx<in TUseCaseResponse>
     {
         void Handle(TUseCaseResponse response);
     }

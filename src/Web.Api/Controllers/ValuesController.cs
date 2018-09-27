@@ -24,7 +24,7 @@ namespace Web.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            await _registerUserUseCase.Handle(new RegisterUserRequest("Mark Macneil"), _registerUserPresenter);
+            await _registerUserUseCase.Handle(new RegisterUserRequest("Mark","Macneil","mark123","Pa$$W0rd!"), _registerUserPresenter);
             return new[] { "value1", "value2" };
         }
 

@@ -5,11 +5,17 @@ namespace Web.Api.Core.Dto.UseCaseRequests
 {
     public class RegisterUserRequest : IUseCaseRequest<RegisterUserResponse>
     {
-        public string Name { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string UserName { get; }
+        public string Password { get; }
 
-        public RegisterUserRequest(string name)
+        public RegisterUserRequest(string firstName, string lastName, string userName, string password)
         {
-            Name = name;
+            FirstName = firstName;
+            LastName = lastName;
+            UserName = userName;
+            Password = password;
         }
     }
 }
