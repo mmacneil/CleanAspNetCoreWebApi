@@ -10,7 +10,7 @@ using Web.Api.Infrastructure.EntityFramework.Data;
 namespace Web.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180926234626_initial")]
+    [Migration("20180927170915_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
