@@ -19,7 +19,7 @@ namespace Web.Api.Controllers
             _registerUserPresenter = registerUserPresenter;
         }
 
-        // GET api/account
+        // POST api/account
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Models.Request.RegisterUserRequest request)
         {
@@ -28,33 +28,7 @@ namespace Web.Api.Controllers
                 return BadRequest(ModelState);
             }
             await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName,request.LastName,request.UserName,request.Password), _registerUserPresenter);
-
             return _registerUserPresenter.ContentResult;
         }
-
-        // GET api/values/5
-       /* [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }*/
     }
 }
