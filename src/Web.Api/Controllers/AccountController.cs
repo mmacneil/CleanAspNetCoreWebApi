@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web.Api.Core.Dto.UseCaseRequests;
 using Web.Api.Core.Interfaces.UseCases;
@@ -20,9 +19,9 @@ namespace Web.Api.Controllers
             _registerUserPresenter = registerUserPresenter;
         }
 
-        // GET api/values
+        // GET api/account
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<string>>> Post([FromBody] Models.Request.RegisterUserRequest request)
+        public async Task<ActionResult> Post([FromBody] Models.Request.RegisterUserRequest request)
         {
             if (!ModelState.IsValid)
             { // re-render the view when validation failed.
