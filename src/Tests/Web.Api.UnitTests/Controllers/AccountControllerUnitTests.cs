@@ -30,13 +30,7 @@ namespace Web.Api.UnitTests.Controllers
             var controller = new AccountController(useCase, outputPort);
 
             // act
-            var result = await controller.Post(new Models.Request.RegisterUserRequest
-            {
-                FirstName = "Mark",
-                LastName = "Macneil",
-                Password = "Pa$$word!",
-                UserName = "mmacneil"
-            });
+            var result = await controller.Post(new Models.Request.RegisterUserRequest());
 
             // assert
             var statusCode = ((ContentResult) result).StatusCode;
@@ -51,13 +45,7 @@ namespace Web.Api.UnitTests.Controllers
             controller.ModelState.AddModelError("FirstName", "Required");
 
             // act
-            var result = await controller.Post(new Models.Request.RegisterUserRequest
-            {
-                FirstName = "",
-                LastName = "",
-                Password = "",
-                UserName = ""
-            });
+            var result = await controller.Post(null);
 
             // assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
