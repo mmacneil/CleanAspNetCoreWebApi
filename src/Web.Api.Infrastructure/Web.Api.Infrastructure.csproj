@@ -39,11 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\Web.Api.Core\Web.Api.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web.Api.Core\Web.Api.Core.csproj" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
  
 
