@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Web.Api.Core.Interfaces.Gateways.Repositories;
+using Web.Api.Infrastructure.Auth;
 using Web.Api.Infrastructure.Data.EntityFramework.Repositories;
 namespace Web.Api.Infrastructure
 {
@@ -8,6 +9,7 @@ namespace Web.Api.Infrastructure
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<JwtFactory>().As<IJwtFactory>().SingleInstance();
         }
     }
 }
