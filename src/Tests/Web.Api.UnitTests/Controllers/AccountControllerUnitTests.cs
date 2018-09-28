@@ -42,5 +42,26 @@ namespace Web.Api.UnitTests.Controllers
             var statusCode = ((ContentResult) result).StatusCode;
             Assert.True(statusCode.HasValue && statusCode.Value == (int) HttpStatusCode.OK);
         }
+
+        [Fact]
+        public async void Post_Returns_Bad_Request_When_Model_Validation_Fails()
+        {
+            // arrange
+            var controller = new AccountController(null,null);
+            controller.ModelState.AddModelError("FirstName", "Required");
+
+            // act
+            var result = await controller.Post(new Models.Request.RegisterUserRequest
+            {
+                FirstName = "",
+                LastName = "",
+                Password = "",
+                UserName = ""
+            });
+
+            // assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<SerializableError>(badRequestResult.Value);
+        }
     }
 }
