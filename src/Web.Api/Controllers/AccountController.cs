@@ -29,7 +29,8 @@ namespace Web.Api.Controllers
                 return BadRequest(ModelState);
             }
             await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName,request.LastName,request.UserName,request.Password), _registerUserPresenter);
-            return Ok(_registerUserPresenter.RegisterUserResponse);
+
+            return _registerUserPresenter.ContentResult;
         }
 
         // GET api/values/5
