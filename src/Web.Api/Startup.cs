@@ -2,6 +2,8 @@
 using System.Net;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +13,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using Web.Api.Core;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
 using Web.Api.Infrastructure.EntityFramework.Data;
+using Web.Api.Models.Validation;
 using Web.Api.Presenters;
 
 namespace Web.Api
@@ -49,7 +53,15 @@ namespace Web.Api
             identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
             identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterUserRequestValidator>());
+
+            services.AddAutoMapper();
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
 
             // Now register our services with Autofac container.
             var builder = new ContainerBuilder();
@@ -73,6 +85,7 @@ namespace Web.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseExceptionHandler(
                 builder =>
                 {
@@ -90,6 +103,16 @@ namespace Web.Api
                             }
                         });
                 });
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanAspNetCoreWebAPI V1");
+            });
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
 
             app.UseMvc();
         }

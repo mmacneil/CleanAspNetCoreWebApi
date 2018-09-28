@@ -4,10 +4,17 @@ namespace Web.Api.Core.Dto.UseCaseResponses
 {
     public class RegisterUserResponse : UseCaseResponseMessage, IUseCaseRequest
     {
-        public bool Registered { get; }
-        public RegisterUserResponse(bool registered, bool success=false, string message=null) : base(success, message)
+        public string Id { get; }
+        public string[] Errors {  get; }
+
+        public RegisterUserResponse(string[] errors, bool success=false, string message=null) : base(success, message)
         {
-            Registered = registered;
+            Errors = errors;
+        }
+
+        public RegisterUserResponse(string id, bool success = false, string message = null) : base(success, message)
+        {
+            Id = id;
         }
     }
 }

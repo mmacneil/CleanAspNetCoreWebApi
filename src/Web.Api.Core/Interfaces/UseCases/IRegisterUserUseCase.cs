@@ -5,6 +5,5 @@ namespace Web.Api.Core.Interfaces.UseCases
 {
     public interface IRegisterUserUseCase : IUseCaseRequestHandler<RegisterUserRequest, RegisterUserResponse>
     {
-
     }
 }

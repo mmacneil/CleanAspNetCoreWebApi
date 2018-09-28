@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
+using Web.Api.Core.Domain;
 using Web.Api.Core.Dto.UseCaseRequests;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;
@@ -18,8 +19,8 @@ namespace Web.Api.Core.UnitTests.UseCases
             // arrange
             var mockUserRepository = new Mock<IUserRepository>();
             mockUserRepository
-                .Setup(repo => repo.Create(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(Task.FromResult((success: true, errors: new[] { (code: "", description: "") }.AsEnumerable())));
+                .Setup(repo => repo.Create(It.IsAny<User>(), It.IsAny<string>()))
+                .Returns(Task.FromResult((success: true, id: "", errors: new[] { (code: "", description: "") }.AsEnumerable())));
 
             var mockOutputPort = new Mock<IOutputPort<RegisterUserResponse>>();
             mockOutputPort.Setup(outputPort => outputPort.Handle(It.IsAny<RegisterUserResponse>()));

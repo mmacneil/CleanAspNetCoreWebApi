@@ -21,11 +21,15 @@ namespace Web.Api.Controllers
         }
 
         // GET api/values
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<string>>> Get()
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<string>>> Post([FromBody] Models.Request.RegisterUserRequest request)
         {
-            await _registerUserUseCase.Handle(new RegisterUserRequest("Mark","Macneil","mark123","Pa$$W0rd!"), _registerUserPresenter);
-            return new[] { "value1", "value2" };
+            if (!ModelState.IsValid)
+            { // re-render the view when validation failed.
+                return BadRequest(ModelState);
+            }
+            await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName,request.LastName,request.UserName,request.Password), _registerUserPresenter);
+            return Ok(_registerUserPresenter.RegisterUserResponse);
         }
 
         // GET api/values/5

@@ -5,11 +5,11 @@ namespace Web.Api.Presenters
 {
     public sealed class RegisterUserPresenter : IOutputPort<RegisterUserResponse>
     {
-        public bool IsRegistered { get; set; }
+        public Models.Response.RegisterUserResponse RegisterUserResponse { get; set; }
 
         public void Handle(RegisterUserResponse response)
         {
-            IsRegistered = response.Registered;
+            RegisterUserResponse = new Models.Response.RegisterUserResponse(response.Success, response.Id,response.Errors);
         }
     }
 }
