@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Web.Api.Core.Domain;
 using Web.Api.Core.Dto.UseCaseRequests;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;
@@ -19,16 +17,12 @@ namespace Web.Api.Core.UseCases
       _userRepository = userRepository;
     }
 
-    /*public async Task<bool> Handle(RegisterUserRequest message, IOutputPort<RegisterUserResponse> outputPort)
-    {
-      var (success, id, errors) = await _userRepository.Create(new User(message.FirstName, message.LastName, message.UserName), message.Password);
-      outputPort.Handle(success ? new RegisterUserResponse(id, true) : new RegisterUserResponse(errors.Select(e => e.description).ToArray()));
-      return success;
-    }*/
 
-    public Task<bool> Handle(LoginRequest message, IOutputPort<LoginResponse> outputPort)
+    public async Task<bool> Handle(LoginRequest message, IOutputPort<LoginResponse> outputPort)
     {
-      throw new NotImplementedException();
+      var (success, token, errors) = await _userRepository.Login(message.UserName, message.Password);
+      outputPort.Handle(success ? new LoginResponse(token, true) : new LoginResponse(errors.Select(e => e.description).ToArray()));
+      return true;
     }
   }
 }

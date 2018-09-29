@@ -2,7 +2,7 @@
 
 namespace Web.Api.Core.Dto.UseCaseResponses
 {
-    public class RegisterUserResponse : UseCaseResponseMessage, IUseCaseRequest
+    public class RegisterUserResponse : UseCaseResponseMessage 
     {
         public string Id { get; }
         public string[] Errors {  get; }

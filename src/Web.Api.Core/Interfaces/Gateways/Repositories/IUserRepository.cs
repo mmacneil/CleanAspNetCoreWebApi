@@ -7,5 +7,6 @@ namespace Web.Api.Core.Interfaces.Gateways.Repositories
     public interface IUserRepository
     {
         Task<(bool success,string id, IEnumerable<(string code,string description)> errors)> Create(User user, string password);
+        Task<(bool success, string token, IEnumerable<(string code, string description)> errors)> Login(string userName, string password);
     }
 }

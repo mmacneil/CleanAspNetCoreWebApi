@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -23,7 +24,6 @@ using Web.Api.Infrastructure;
 using Web.Api.Infrastructure.Auth;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
 using Web.Api.Infrastructure.EntityFramework.Data;
-using Web.Api.Models.Validation;
 using Web.Api.Presenters;
 
 namespace Web.Api
@@ -107,7 +107,7 @@ namespace Web.Api
       identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
       identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterUserRequestValidator>());
+      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
       services.AddAutoMapper();
 
@@ -125,6 +125,7 @@ namespace Web.Api
 
       // Presenters
       builder.RegisterType<RegisterUserPresenter>().SingleInstance();
+      builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => t.Name.EndsWith("Presenter")).SingleInstance();
 
       builder.Populate(services);
       var container = builder.Build();

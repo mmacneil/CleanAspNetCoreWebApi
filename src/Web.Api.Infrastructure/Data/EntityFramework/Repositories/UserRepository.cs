@@ -39,6 +39,7 @@ namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
     public async Task<(bool success, string token, IEnumerable<(string code, string description)> errors)> Login(string userName, string password)
     {
       var identity = await GetClaimsIdentity(userName, password);
+
       if (identity == null)
       {
         return (false,null, new[] {(code: "login_failure", description: "Invalid username or password.") }.AsEnumerable());
