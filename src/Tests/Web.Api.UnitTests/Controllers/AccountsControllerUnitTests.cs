@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Web.Api.Controllers;
-using Web.Api.Core.Domain;
+using Web.Api.Core.Domain.Entities;
 using Web.Api.Core.Interfaces.Gateways.Repositories;
 using Web.Api.Core.UseCases;
 using Web.Api.Presenters;
@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Web.Api.UnitTests.Controllers
 {
-    public class AccountControllerUnitTests
+    public class AccountsControllerUnitTests
     {
         [Fact]
         public async void Post_Returns_Ok_When_Use_Case_Succeeds()
@@ -27,7 +27,7 @@ namespace Web.Api.UnitTests.Controllers
             var outputPort = new RegisterUserPresenter();
             var useCase = new RegisterUserUseCase(mockUserRepository.Object);
             
-            var controller = new AccountController(useCase, outputPort);
+            var controller = new AccountsController(useCase, outputPort);
 
             // act
             var result = await controller.Post(new Models.Request.RegisterUserRequest());
@@ -41,7 +41,7 @@ namespace Web.Api.UnitTests.Controllers
         public async void Post_Returns_Bad_Request_When_Model_Validation_Fails()
         {
             // arrange
-            var controller = new AccountController(null,null);
+            var controller = new AccountsController(null,null);
             controller.ModelState.AddModelError("FirstName", "Required");
 
             // act

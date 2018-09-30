@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;
 
@@ -16,10 +17,7 @@ namespace Web.Api.Presenters
     public void Handle(LoginResponse response)
     {
       ContentResult.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.Unauthorized);
-      if (response.Success)
-      {
-        ContentResult.Content = response.Token;
-      }
+      ContentResult.Content = response.Success ? JsonConvert.SerializeObject(response.Token) : JsonConvert.SerializeObject(response.Errors);
     }
   }
 }

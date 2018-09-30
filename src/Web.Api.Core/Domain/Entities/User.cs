@@ -1,5 +1,5 @@
 ﻿
-namespace Web.Api.Core.Domain
+namespace Web.Api.Core.Domain.Entities
 {
     public class User
     {

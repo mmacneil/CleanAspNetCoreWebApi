@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Web.Api.Core.Domain;
+using Web.Api.Core.Domain.Entities;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
 
 namespace Web.Api.Infrastructure.Data.Mapping

@@ -4,7 +4,7 @@ namespace Web.Api.Core.Dto.UseCaseResponses
 {
   public class LoginResponse : UseCaseResponseMessage
   {
-    public string Token { get; }
+    public Token Token { get; }
     public string[] Errors { get; }
 
     public LoginResponse(string[] errors, bool success = false, string message = null) : base(success, message)
@@ -12,7 +12,7 @@ namespace Web.Api.Core.Dto.UseCaseResponses
       Errors = errors;
     }
 
-    public LoginResponse(string token, bool success = false, string message = null) : base(success, message)
+    public LoginResponse(Token token, bool success = false, string message = null) : base(success, message)
     {
       Token = token;
     }

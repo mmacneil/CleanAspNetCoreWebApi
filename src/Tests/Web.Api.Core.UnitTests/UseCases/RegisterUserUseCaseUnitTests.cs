@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
-using Web.Api.Core.Domain;
+using Web.Api.Core.Domain.Entities;
 using Web.Api.Core.Dto.UseCaseRequests;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;

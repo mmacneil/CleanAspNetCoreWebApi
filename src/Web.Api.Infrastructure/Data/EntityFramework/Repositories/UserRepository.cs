@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Web.Api.Core.Domain;
+using Web.Api.Core.Domain.Entities;
+using Web.Api.Core.Dto;
 using Web.Api.Core.Interfaces.Gateways.Repositories;
 using Web.Api.Infrastructure.Auth;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
-using Web.Api.Infrastructure.Helpers;
+
 
 namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
 {
@@ -36,7 +36,7 @@ namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
       return identityResult.Succeeded ? (true, appUser.Id, null) : (false, "", identityResult.Errors.Select(e => (e.Code, e.Description)));
     }
 
-    public async Task<(bool success, string token, IEnumerable<(string code, string description)> errors)> Login(string userName, string password)
+    public async Task<(bool success, Token token, IEnumerable<(string code, string description)> errors)> Login(string userName, string password)
     {
       var identity = await GetClaimsIdentity(userName, password);
 
@@ -45,8 +45,7 @@ namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
         return (false,null, new[] {(code: "login_failure", description: "Invalid username or password.") }.AsEnumerable());
       }
 
-      var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, userName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
-      return (true, jwt, null);
+      return (true, new Token(identity.Claims.Single(c => c.Type == "id").Value, await _jwtFactory.GenerateEncodedToken(userName, identity), (int)_jwtOptions.ValidFor.TotalSeconds), null);
     }
 
     private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
