@@ -9,7 +9,7 @@ namespace Web.Api.UnitTests.Presenters
     public class RegisterUserPresenterUnitTests
     {
         [Fact]
-        public void Contains_Ok_Status_Code_When_Use_Case_Response_Succeeds()
+        public void Contains_Ok_Status_Code_When_Use_Case_Succeeds()
         {
             // arrange
             var presenter = new RegisterUserPresenter();
@@ -22,7 +22,7 @@ namespace Web.Api.UnitTests.Presenters
         }
 
         [Fact]
-        public void Contains_Id_When_Use_Case_Response_Succeeds()
+        public void Contains_Id_When_Use_Case_Succeeds()
         {
             // arrange
             var presenter = new RegisterUserPresenter();
@@ -37,7 +37,7 @@ namespace Web.Api.UnitTests.Presenters
         }
 
         [Fact]
-        public void Contains_Errors_When_Use_Case_Response_Fails()
+        public void Contains_Errors_When_Use_Case_Fails()
         {
             // arrange
             var presenter = new RegisterUserPresenter();

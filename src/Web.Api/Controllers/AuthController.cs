@@ -19,9 +19,9 @@ namespace Web.Api.Controllers
       _loginPresenter = loginPresenter;
     }
 
-    // POST api/login
-    [HttpPost]
-    public async Task<ActionResult> Post([FromBody] Models.Request.LoginRequest request)
+    // POST api/auth/login
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] Models.Request.LoginRequest request)
     {
       if (!ModelState.IsValid)
       { // re-render the view when validation failed.
