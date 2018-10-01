@@ -17,10 +17,10 @@
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
                 "enabled": true,
-                "args": "${auto-detect-url}",
+                "args": "http://localhost:5000/swagger",
                 "windows": {
                     "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
+                    "args": "/C start http://localhost:5000/swagger"
                 },
                 "osx": {
                     "command": "open"
