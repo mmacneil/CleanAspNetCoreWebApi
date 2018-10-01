@@ -9,6 +9,6 @@ Starter project for creating APIs built on ASP.NET Core using clean architecture
 Simply open the solution file <code>CleanAspNetCoreWebAPI.sln</code> and build/run.
 
 # Visual Studio Code
-Open the <code>src</code> fold and <code>F5</code> to build/run.
+Open the <code>src</code> folder and <code>F5</code> to build/run.
 
 
