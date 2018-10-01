@@ -27,7 +27,7 @@ namespace Web.Api.Controllers
             { // re-render the view when validation failed.
                 return BadRequest(ModelState);
             }
-            await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName,request.LastName,request.UserName,request.Password), _registerUserPresenter);
+            await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName,request.LastName,request.Email, request.UserName,request.Password), _registerUserPresenter);
             return _registerUserPresenter.ContentResult;
         }
     }

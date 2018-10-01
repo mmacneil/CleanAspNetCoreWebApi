@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Web.Api.Core.Domain.Entities;
 using Web.Api.Core.Dto;
 
