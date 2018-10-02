@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Web.Api.Controllers;
 using Web.Api.Core.Domain.Entities;
+using Web.Api.Core.Dto.GatewayResponses.Repositories;
 using Web.Api.Core.Interfaces.Gateways.Repositories;
 using Web.Api.Core.UseCases;
 using Web.Api.Presenters;
@@ -21,7 +21,7 @@ namespace Web.Api.UnitTests.Controllers
             var mockUserRepository = new Mock<IUserRepository>();
             mockUserRepository
                 .Setup(repo => repo.Create(It.IsAny<User>(), It.IsAny<string>()))
-                .Returns(Task.FromResult((success: true, id: "", errors: new[] { (code: "", description: "") }.AsEnumerable())));
+                .Returns(Task.FromResult(new CreateUserResponse("",true)));
 
             // fakes
             var outputPort = new RegisterUserPresenter();

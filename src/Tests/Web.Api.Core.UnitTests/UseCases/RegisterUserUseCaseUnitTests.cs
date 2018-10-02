@@ -1,7 +1,7 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Web.Api.Core.Domain.Entities;
+using Web.Api.Core.Dto.GatewayResponses.Repositories;
 using Web.Api.Core.Dto.UseCaseRequests;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;
@@ -23,7 +23,7 @@ namespace Web.Api.Core.UnitTests.UseCases
       var mockUserRepository = new Mock<IUserRepository>();
       mockUserRepository
         .Setup(repo => repo.Create(It.IsAny<User>(), It.IsAny<string>()))
-        .Returns(Task.FromResult((success: true, id: "", errors: new[] { (code: "", description: "") }.AsEnumerable())));
+        .Returns(Task.FromResult(new CreateUserResponse("", true)));
 
       // 2. The use case and star of this test
       var useCase = new RegisterUserUseCase(mockUserRepository.Object);

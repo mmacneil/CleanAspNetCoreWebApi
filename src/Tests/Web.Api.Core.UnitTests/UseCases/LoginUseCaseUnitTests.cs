@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using Web.Api.Core.Dto;
 using Web.Api.Core.Dto.UseCaseRequests;
@@ -20,7 +19,7 @@ namespace Web.Api.Core.UnitTests.UseCases
       var mockUserRepository = new Mock<IUserRepository>();
       mockUserRepository
         .Setup(repo => repo.Login(It.IsAny<string>(), It.IsAny<string>()))
-        .Returns(Task.FromResult((success: true, token: new Token("", null, 0), errors: new[] { (code: "", description: "") }.AsEnumerable())));
+        .Returns(Task.FromResult(new Dto.GatewayResponses.Repositories.LoginResponse(new Token("", "", 0), true)));
 
       var useCase = new LoginUseCase(mockUserRepository.Object);
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Web.Api.Core.Domain.Entities;
 using Web.Api.Core.Dto;
+using Web.Api.Core.Dto.GatewayResponses.Repositories;
 using Web.Api.Core.Interfaces.Gateways.Repositories;
 using Web.Api.Infrastructure.Auth;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
@@ -29,23 +30,23 @@ namespace Web.Api.Infrastructure.Data.EntityFramework.Repositories
       _jwtOptions = jwtOptions.Value;
     }
 
-    public async Task<(bool success, string id, IEnumerable<(string code, string description)> errors)> Create(User user, string password)
+    public async Task<CreateUserResponse> Create(User user, string password)
     {
       var appUser = _mapper.Map<AppUser>(user);
       var identityResult = await _userManager.CreateAsync(appUser, password);
-      return identityResult.Succeeded ? (true, appUser.Id, null) : (false, "", identityResult.Errors.Select(e => (e.Code, e.Description)));
+      return new CreateUserResponse(appUser.Id,identityResult.Succeeded, identityResult.Succeeded ? null : identityResult.Errors.Select(e => new KeyValuePair<string, string>(e.Code, e.Description)));
     }
 
-    public async Task<(bool success, Token token, IEnumerable<(string code, string description)> errors)> Login(string userName, string password)
+    public async Task<LoginResponse> Login(string userName, string password)
     {
       var identity = await GetClaimsIdentity(userName, password);
 
       if (identity == null)
       {
-        return (false,null, new[] {(code: "login_failure", description: "Invalid username or password.") }.AsEnumerable());
+        return new LoginResponse(null,false, new[] {new KeyValuePair<string, string>("login_failure", "Invalid username or password.")});
       }
 
-      return (true, new Token(identity.Claims.Single(c => c.Type == "id").Value, await _jwtFactory.GenerateEncodedToken(userName, identity), (int)_jwtOptions.ValidFor.TotalSeconds), null);
+      return new LoginResponse(new Token(identity.Claims.Single(c => c.Type == "id").Value, await _jwtFactory.GenerateEncodedToken(userName, identity), (int)_jwtOptions.ValidFor.TotalSeconds), true);
     }
 
     private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)

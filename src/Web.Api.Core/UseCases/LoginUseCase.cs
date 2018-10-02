@@ -19,8 +19,8 @@ namespace Web.Api.Core.UseCases
 
     public async Task<bool> Handle(LoginRequest message, IOutputPort<LoginResponse> outputPort)
     {
-      var (success, token, errors) = await _userRepository.Login(message.UserName, message.Password);
-      outputPort.Handle(success ? new LoginResponse(token, true) : new LoginResponse(errors.Select(e => e.description).ToArray()));
+      var response = await _userRepository.Login(message.UserName, message.Password);
+      outputPort.Handle(response.Success ? new LoginResponse(response.Token, true) : new LoginResponse(response.Errors.Select(e => e.Value)));
       return true;
     }
   }
