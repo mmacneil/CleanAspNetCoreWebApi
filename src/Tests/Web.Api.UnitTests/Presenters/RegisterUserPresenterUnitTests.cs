@@ -32,8 +32,8 @@ namespace Web.Api.UnitTests.Presenters
 
             // assert
             dynamic data = JsonConvert.DeserializeObject(presenter.ContentResult.Content);
-            Assert.True(data.Success.Value);
-            Assert.Equal("1234",data.Id.Value);
+            Assert.True(data.success.Value);
+            Assert.Equal("1234",data.id.Value);
         }
 
         [Fact]
@@ -47,8 +47,8 @@ namespace Web.Api.UnitTests.Presenters
 
             // assert
             dynamic data = JsonConvert.DeserializeObject(presenter.ContentResult.Content);
-            Assert.False(data.Success.Value);
-            Assert.Equal("missing first name", data.Errors.First.Value);
+            Assert.False(data.success.Value);
+            Assert.Equal("missing first name", data.errors.First.Value);
         }
     }
 }

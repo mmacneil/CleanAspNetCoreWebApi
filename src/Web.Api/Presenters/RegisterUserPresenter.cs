@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
 using Web.Api.Core.Dto.UseCaseResponses;
 using Web.Api.Core.Interfaces;
+using Web.Api.Serialization;
 
 namespace Web.Api.Presenters
 {
@@ -16,8 +16,8 @@ namespace Web.Api.Presenters
 
         public void Handle(RegisterUserResponse response)
         {
-            ContentResult.Content = JsonConvert.SerializeObject(response, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
             ContentResult.StatusCode = (int)(response.Success ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
+            ContentResult.Content = JsonSerializer.SerializeObject(response);
         }
     }
 }
