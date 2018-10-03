@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+ 
 
-namespace Web.Api.Infrastructure.EntityFramework.Data
+namespace Web.Api.Infrastructure.Data.EntityFramework
 {
     public class DbContextFactory : DesignTimeDbContextFactoryBase<ApplicationDbContext>
     {

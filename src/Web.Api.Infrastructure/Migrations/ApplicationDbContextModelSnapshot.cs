@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Web.Api.Infrastructure.EntityFramework.Data;
+using Web.Api.Infrastructure.Data.EntityFramework;
 
 namespace Web.Api.Infrastructure.Migrations
 {
@@ -129,7 +129,7 @@ namespace Web.Api.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Web.Api.Infrastructure.Data.EntityFramework.Entities.AppUser", b =>
+            modelBuilder.Entity("Web.Api.Infrastructure.Data.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -194,7 +194,7 @@ namespace Web.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Web.Api.Infrastructure.Data.EntityFramework.Entities.AppUser")
+                    b.HasOne("Web.Api.Infrastructure.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -202,7 +202,7 @@ namespace Web.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Web.Api.Infrastructure.Data.EntityFramework.Entities.AppUser")
+                    b.HasOne("Web.Api.Infrastructure.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -215,7 +215,7 @@ namespace Web.Api.Infrastructure.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Web.Api.Infrastructure.Data.EntityFramework.Entities.AppUser")
+                    b.HasOne("Web.Api.Infrastructure.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -223,7 +223,7 @@ namespace Web.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Web.Api.Infrastructure.Data.EntityFramework.Entities.AppUser")
+                    b.HasOne("Web.Api.Infrastructure.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

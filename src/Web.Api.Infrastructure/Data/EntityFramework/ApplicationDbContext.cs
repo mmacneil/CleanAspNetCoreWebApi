@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Web.Api.Infrastructure.Data.Entities;
 using Web.Api.Infrastructure.Data.EntityFramework.Entities;
 
-namespace Web.Api.Infrastructure.EntityFramework.Data
+
+namespace Web.Api.Infrastructure.Data.EntityFramework
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
