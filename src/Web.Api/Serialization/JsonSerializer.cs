@@ -16,12 +16,8 @@ namespace Web.Api.Serialization
             return JsonConvert.SerializeObject(o, Formatting.Indented, Settings);
         }
 
-        public sealed class JsonContractResolver : DefaultContractResolver
+        public sealed class JsonContractResolver : CamelCasePropertyNamesContractResolver
         {
-            protected override string ResolvePropertyName(string propertyName)
-            {
-                return propertyName.ToLower();
-            }
         }
     }
 }
