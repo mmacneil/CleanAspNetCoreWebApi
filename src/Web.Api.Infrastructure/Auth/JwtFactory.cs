@@ -22,7 +22,7 @@ namespace Web.Api.Infrastructure.Auth
 
         public async Task<Token> GenerateEncodedToken(string id, string userName)
         {
-            var identity = GenerateClaimsIdentity(userName, id);
+            var identity = GenerateClaimsIdentity(id, userName);
 
             var claims = new[]
             {
