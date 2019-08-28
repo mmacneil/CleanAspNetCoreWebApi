@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Web.Api.Core;
 using Web.Api.Extensions;
@@ -28,141 +30,141 @@ using Web.Api.Presenters;
 
 namespace Web.Api
 {
-  public class Startup
-  {
-    private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
-    private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
-
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-      Configuration = configuration;
-    }
+        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
 
-    public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public IServiceProvider ConfigureServices(IServiceCollection services)
-    {
-      // Add framework services.
-      services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("Web.Api.Infrastructure")));
+        public IConfiguration Configuration { get; }
 
-      // jwt wire up
-      // Get options from app settings
-      var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-
-      // Configure JwtIssuerOptions
-      services.Configure<JwtIssuerOptions>(options =>
-      {
-        options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-        options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-        options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
-      });
-
-      var tokenValidationParameters = new TokenValidationParameters
-      {
-        ValidateIssuer = true,
-        ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-
-        ValidateAudience = true,
-        ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = _signingKey,
-
-        RequireExpirationTime = false,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
-      };
-
-      services.AddAuthentication(options =>
-      {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-      }).AddJwtBearer(configureOptions =>
-      {
-        configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-        configureOptions.TokenValidationParameters = tokenValidationParameters;
-        configureOptions.SaveToken = true;
-      });
-
-      // add identity
-      var identityBuilder = services.AddIdentityCore<AppUser>(o =>
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-              // configure identity options
-              o.Password.RequireDigit = false;
-              o.Password.RequireLowercase = false;
-              o.Password.RequireUppercase = false;
-              o.Password.RequireNonAlphanumeric = false;
-              o.Password.RequiredLength = 6;
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseExceptionHandler(
+                builder =>
+                {
+                    builder.Run(
+                        async context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+                            var error = context.Features.Get<IExceptionHandlerFeature>();
+                            if (error != null)
+                            {
+                                context.Response.AddApplicationError(error.Error.Message);
+                                await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
+                            }
+                        });
+                });
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger
+            // JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanAspNetCoreWebAPI V1");
             });
 
-      identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
-      identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
 
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            app.UseMvc();
+        }
 
-      services.AddAutoMapper();
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public IServiceProvider ConfigureServices(IServiceCollection services)
+        {
+            // Add framework services.
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("Web.Api.Infrastructure")));
 
-      // Register the Swagger generator, defining 1 or more Swagger documents
-      services.AddSwaggerGen(c =>
-      {
-        c.SwaggerDoc("v1", new Info { Title = "CleanAspNetCoreWebAPI", Version = "v1" });
-      });
+            // jwt wire up Get options from app settings
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
-      // Now register our services with Autofac container.
-      var builder = new ContainerBuilder();
+            // Configure JwtIssuerOptions
+            services.Configure<JwtIssuerOptions>(options =>
+            {
+                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+            });
 
-      builder.RegisterModule(new CoreModule());
-      builder.RegisterModule(new InfrastructureModule());
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
 
-      // Presenters
-      builder.RegisterType<RegisterUserPresenter>().SingleInstance();
-      builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => t.Name.EndsWith("Presenter")).SingleInstance();
+                ValidateAudience = true,
+                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
 
-      builder.Populate(services);
-      var container = builder.Build();
-      // Create the IServiceProvider based on the container.
-      return new AutofacServiceProvider(container);
-    }
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _signingKey,
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-      }
+                RequireExpirationTime = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
 
-      app.UseExceptionHandler(
-          builder =>
-          {
-            builder.Run(
-                      async context =>
-                      {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(configureOptions =>
+            {
+                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                configureOptions.TokenValidationParameters = tokenValidationParameters;
+                configureOptions.SaveToken = true;
+            });
 
-                    var error = context.Features.Get<IExceptionHandlerFeature>();
-                    if (error != null)
-                    {
-                      context.Response.AddApplicationError(error.Error.Message);
-                      await context.Response.WriteAsync(error.Error.Message).ConfigureAwait(false);
-                    }
+            // add identity
+            var identityBuilder = services.AddIdentityCore<AppUser>(o =>
+                  {
+                      // configure identity options
+                      o.Password.RequireDigit = false;
+                      o.Password.RequireLowercase = false;
+                      o.Password.RequireUppercase = false;
+                      o.Password.RequireNonAlphanumeric = false;
+                      o.Password.RequiredLength = 6;
                   });
-          });
 
-      // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-      // specifying the Swagger JSON endpoint.
-      app.UseSwaggerUI(c =>
-      {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CleanAspNetCoreWebAPI V1");
-      });
+            identityBuilder = new IdentityBuilder(identityBuilder.UserType, typeof(IdentityRole), identityBuilder.Services);
+            identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-      // Enable middleware to serve generated Swagger as a JSON endpoint.
-      app.UseSwagger();
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+                    .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
-      app.UseMvc();
+            services.AddAutoMapper(typeof(Startup));
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CleanAspNetCoreWebAPI", Version = "v1" });
+            });
+
+            // Now register our services with Autofac container.
+            var builder = new ContainerBuilder();
+
+            builder.RegisterModule(new CoreModule());
+            builder.RegisterModule(new InfrastructureModule());
+
+            // Presenters
+            builder.RegisterType<RegisterUserPresenter>().SingleInstance();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => t.Name.EndsWith("Presenter")).SingleInstance();
+
+            builder.Populate(services);
+            var container = builder.Build();
+            // Create the IServiceProvider based on the container.
+            return new AutofacServiceProvider(container);
+        }
     }
-  }
 }
