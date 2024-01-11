@@ -12,9 +12,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0-preview2-35157" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0-preview2-35157" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0-preview2-35157" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.2.4" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.7.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.7.0" />
     <!-- Keep this -->
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0-preview2-35157" />
   </ItemGroup>
